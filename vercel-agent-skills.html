@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>Vercel Agent Skills 分析</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif;background:#0a0e27;color:#e0e6ed;min-height:100vh;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.container{max-width:375px;margin:0 auto;padding:16px}
+.header{text-align:center;padding:24px 0 20px}
+.header h1{font-size:20px;font-weight:700;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header p{font-size:12px;color:#718096;margin-top:6px}
+.header .src{font-size:11px;color:#4a5568;margin-top:4px;word-break:break-all}
+.stats{display:flex;gap:8px;margin:16px 0;justify-content:center}
+.stat{background:rgba(102,126,234,.1);border:1px solid rgba(102,126,234,.2);border-radius:10px;padding:10px 14px;text-align:center;flex:1}
+.stat .num{font-size:20px;font-weight:700;color:#667eea}
+.stat .label{font-size:10px;color:#718096;margin-top:2px}
+.skill-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px;margin-bottom:14px;transition:all .3s}
+.skill-card:active{transform:scale(.98)}
+.skill-name{font-size:16px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.skill-name .icon{font-size:20px}
+.skill-desc{font-size:13px;color:#a0aec0;line-height:1.6;margin-bottom:12px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.tag{font-size:10px;padding:3px 8px;border-radius:8px;font-weight:500}
+.tag.critical{background:rgba(239,68,68,.15);color:#f87171}
+.tag.high{background:rgba(251,191,36,.15);color:#fbbf24}
+.tag.medium{background:rgba(52,211,153,.15);color:#34d399}
+.rules-section{margin-top:10px}
+.rules-title{font-size:11px;color:#718096;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.rule{font-size:12px;color:#cbd5e0;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;align-items:flex-start;gap:6px}
+.rule:last-child{border:none}
+.rule .bullet{color:#667eea;flex-shrink:0}
+.rule-cat{font-size:11px;font-weight:600;color:#667eea;margin:12px 0 6px;display:flex;align-items:center;gap:6px}
+.expand-btn{font-size:11px;color:#667eea;background:rgba(102,126,234,.1);border:1px solid rgba(102,126,234,.2);border-radius:8px;padding:6px 12px;margin-top:8px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.hidden{display:none}
+.verdict{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:14px;padding:20px;margin:20px 0;text-align:center}
+.verdict h3{color:#fff;font-size:16px;margin-bottom:8px}
+.verdict p{color:rgba(255,255,255,.8);font-size:13px;line-height:1.6}
+.footer{text-align:center;padding:20px;color:#4a5568;font-size:11px}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+<h1>🔍 Vercel Agent Skills</h1>
+<p>Skill分析 + 效果展示</p>
+<div class="src">github.com/vercel-labs/agent-skills</div>
+</div>
+
+<div class="stats">
+<div class="stat"><div class="num">5</div><div class="label">Skills</div></div>
+<div class="stat"><div class="num">57+</div><div class="label">Rules</div></div>
+<div class="stat"><div class="num">8</div><div class="label">Categories</div></div>
+</div>
+
+<!-- Skill 1: React Best Practices -->
+<div class="skill-card">
+<div class="skill-name"><span class="icon">⚛️</span> React Best Practices</div>
+<div class="skill-desc">Vercel工程团队的React/Next.js性能优化指南。57条规则，8个类别，按影响力排序。写代码、review代码、重构时自动触发。</div>
+<div class="tags">
+<span class="tag critical">CRITICAL: 消除瀑布流</span>
+<span class="tag critical">CRITICAL: Bundle优化</span>
+<span class="tag high">HIGH: 服务端性能</span>
+</div>
+<div class="rules-section">
+<div class="rules-title">核心规则示例</div>
+<div class="rule-cat">🔴 消除瀑布流 (CRITICAL)</div>
+<div class="rule"><span class="bullet">→</span> async-parallel: 用Promise.all()并行独立操作</div>
+<div class="rule"><span class="bullet">→</span> async-suspense-boundaries: 用Suspense流式传输内容</div>
+<div class="rule-cat">📦 Bundle优化 (CRITICAL)</div>
+<div class="rule"><span class="bullet">→</span> bundle-barrel-imports: 直接导入，避免barrel文件</div>
+<div class="rule"><span class="bullet">→</span> bundle-dynamic-imports: 用next/dynamic懒加载重组件</div>
+<div class="rule-cat" id="rp-more" class="hidden">🖥 服务端性能 (HIGH)</div>
+<div class="rule"><span class="bullet">→</span> server-cache-react: 用React.cache()请求级去重</div>
+<div class="rule"><span class="bullet">→</span> server-auth-actions: Server Actions要像API一样鉴权</div>
+</div>
+</div>
+
+<!-- Skill 2: Composition Patterns -->
+<div class="skill-card">
+<div class="skill-name"><span class="icon">🧩</span> Composition Patterns</div>
+<div class="skill-desc">React组合模式 — 解决boolean prop泛滥问题。用compound components、状态提升、context注入构建可扩展的组件库。含React 19新API。</div>
+<div class="tags">
+<span class="tag high">HIGH: 组件架构</span>
+<span class="tag medium">MEDIUM: 状态管理</span>
+<span class="tag medium">MEDIUM: React 19</span>
+</div>
+<div class="rules-section">
+<div class="rules-title">核心规则</div>
+<div class="rule"><span class="bullet">→</span> architecture-avoid-boolean-props: 不用boolean props定制行为，用组合</div>
+<div class="rule"><span class="bullet">→</span> architecture-compound-components: 用共享context构建复合组件</div>
+<div class="rule"><span class="bullet">→</span> state-context-interface: 定义通用接口(state/actions/meta)做依赖注入</div>
+<div class="rule"><span class="bullet">→</span> react19-no-forwardref: React 19不再需要forwardRef</div>
+</div>
+</div>
+
+<!-- Skill 3: React Native -->
+<div class="skill-card">
+<div class="skill-name"><span class="icon">📱</span> React Native Skills</div>
+<div class="skill-desc">React Native + Expo最佳实践。覆盖列表性能、动画、导航、UI模式、原生模块配置。构建高性能移动应用的完整指南。</div>
+<div class="tags">
+<span class="tag critical">CRITICAL: 列表性能</span>
+<span class="tag high">HIGH: 动画</span>
+<span class="tag high">HIGH: 导航</span>
+</div>
+<div class="rules-section">
+<div class="rules-title">核心规则</div>
+<div class="rule"><span class="bullet">→</span> list-performance-virtualize: 大列表用FlashList</div>
+<div class="rule"><span class="bullet">→</span> list-performance-item-memo: 列表项组件要memoize</div>
+<div class="rule"><span class="bullet">→</span> animation-gpu-properties: 只动画transform和opacity</div>
+<div class="rule"><span class="bullet">→</span> monorepo-single-dependency-versions: monorepo统一依赖版本</div>
+</div>
+</div>
+
+<!-- Skill 4: Web Design Guidelines -->
+<div class="skill-card">
+<div class="skill-name"><span class="icon">🎨</span> Web Design Guidelines</div>
+<div class="skill-desc">UI代码审查工具 — 检查Web界面是否符合设计规范。说"review my UI"或"check accessibility"自动触发。实时从GitHub拉取最新规则。</div>
+<div class="tags">
+<span class="tag high">HIGH: 可访问性</span>
+<span class="tag medium">MEDIUM: UX审计</span>
+</div>
+<div class="rules-section">
+<div class="rules-title">工作方式</div>
+<div class="rule"><span class="bullet">1.</span> 从GitHub获取最新设计规范</div>
+<div class="rule"><span class="bullet">2.</span> 读取你指定的文件</div>
+<div class="rule"><span class="bullet">3.</span> 逐条检查所有规则</div>
+<div class="rule"><span class="bullet">4.</span> 输出 file:line 格式的发现</div>
+</div>
+</div>
+
+<!-- Skill 5: Vercel Deploy -->
+<div class="skill-card">
+<div class="skill-name"><span class="icon">🚀</span> Vercel Deploy (Claimable)</div>
+<div class="skill-desc">一键部署到Vercel — 生成可认领的部署链接。Claude.ai专用skill，让AI直接帮你部署项目。</div>
+<div class="tags">
+<span class="tag medium">部署自动化</span>
+<span class="tag medium">Claude.ai专用</span>
+</div>
+</div>
+
+<!-- Verdict -->
+<div class="verdict">
+<h3>💡 对你的价值</h3>
+<p>React Best Practices最实用 — 57条Vercel内部规则，直接提升代码质量。Web Design Guidelines可以审查你的Intent Studio和XHS Demo的UI。Composition Patterns适合构建组件库。</p>
+</div>
+
+<div class="footer">
+Analyzed by Claw 🦞 | vercel-labs/agent-skills<br>
+5 skills · 57+ rules · MIT License
+</div>
+
+</div>
+</body>
+</html>
