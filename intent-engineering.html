@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>baoyu-xhs-images 效果演示</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB',sans-serif;background:#f5f5f5;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.header{text-align:center;padding:20px 16px 10px;width:100%;max-width:375px}
+.header h1{font-size:14px;color:#999;font-weight:400;margin-bottom:4px}
+.header h2{font-size:12px;color:#bbb;font-weight:300}
+.swiper{width:375px;height:500px;position:relative;overflow:hidden;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.12);margin:10px auto}
+.slides{display:flex;transition:transform .4s cubic-bezier(.25,.8,.25,1);height:100%;width:calc(375px * 9)}
+.slide{width:375px;height:500px;flex-shrink:0;padding:32px 28px;display:flex;flex-direction:column;position:relative;overflow:hidden}
+
+/* Notion Style - Card 1: Cover */
+.s1{background:linear-gradient(135deg,#FFF1E6 0%,#FFE4CC 50%,#FFDAB9 100%)}
+.s1 .tag{display:inline-block;background:#FF6B6B;color:#fff;font-size:11px;padding:4px 12px;border-radius:20px;margin-bottom:20px;width:fit-content}
+.s1 h1{font-size:28px;color:#2D2D2D;line-height:1.4;font-weight:700;margin-bottom:16px}
+.s1 .sub{font-size:15px;color:#666;line-height:1.6}
+.s1 .deco{position:absolute;bottom:-20px;right:-20px;font-size:120px;opacity:.15}
+
+/* Card 2-7: Content cards */
+.content-card{background:#FFFDF9}
+.content-card .num{font-size:48px;font-weight:800;background:linear-gradient(135deg,#FF6B6B,#FF8E53);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+.content-card h2{font-size:22px;color:#2D2D2D;font-weight:700;margin-bottom:12px;line-height:1.3}
+.content-card .desc{font-size:14px;color:#666;line-height:1.8;margin-bottom:16px}
+.content-card .highlight{background:linear-gradient(transparent 60%,#FFE066 60%);padding:0 2px}
+.content-card .tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.content-card .tag-row span{font-size:11px;padding:4px 10px;border-radius:12px;background:#F0F0F0;color:#666}
+
+/* Card 3: Teal accent */
+.s3 .num{background:linear-gradient(135deg,#4ECDC4,#44B09E);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* Card 4: Gold accent */
+.s4 .num{background:linear-gradient(135deg,#FFD93D,#FF9A3C);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* Card 5: Purple accent */
+.s5 .num{background:linear-gradient(135deg,#A78BFA,#7C3AED);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* Card 6: Blue accent */
+.s6 .num{background:linear-gradient(135deg,#60A5FA,#3B82F6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* Card 7: Green accent */
+.s7 .num{background:linear-gradient(135deg,#34D399,#059669);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* Card 8: Summary */
+.s8{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff}
+.s8 h2{color:#fff;font-size:24px;margin-bottom:20px}
+.s8 .point{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.s8 .point .icon{font-size:20px;flex-shrink:0;margin-top:2px}
+.s8 .point p{font-size:14px;line-height:1.6;color:rgba(255,255,255,.9)}
+
+/* Card 9: CTA */
+.s9{background:#2D2D2D;color:#fff;justify-content:center;align-items:center;text-align:center}
+.s9 .emoji{font-size:64px;margin-bottom:20px}
+.s9 h2{color:#fff;font-size:22px;margin-bottom:12px}
+.s9 p{color:rgba(255,255,255,.6);font-size:13px;line-height:1.6}
+.s9 .cta{margin-top:24px;background:linear-gradient(135deg,#FF6B6B,#FF8E53);color:#fff;border:none;padding:12px 32px;border-radius:24px;font-size:15px;font-weight:600}
+
+/* Navigation */
+.dots{display:flex;gap:6px;justify-content:center;padding:12px}
+.dot{width:6px;height:6px;border-radius:3px;background:#ddd;transition:all .3s}
+.dot.active{width:20px;background:#FF6B6B}
+.page-num{position:absolute;top:16px;right:20px;font-size:11px;color:rgba(0,0,0,.3);font-weight:500}
+.skill-badge{position:absolute;bottom:16px;right:20px;font-size:10px;color:rgba(0,0,0,.2)}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>📸 baoyu-xhs-images 效果演示</h1>
+<h2>Style: notion | Layout: balanced | 左右滑动 →</h2>
+</div>
+
+<div class="swiper" id="swiper">
+<div class="slides" id="slides">
+
+<!-- Card 1: Cover -->
+<div class="slide s1">
+<span class="page-num">1/9</span>
+<div class="tag">🔥 2026趋势</div>
+<h1>Intent Engineering<br>意图工程</h1>
+<div class="sub">从Prompt到Intent<br>产品经理的AI新武器<br><br>用产品思维设计AI Agent<br>不写代码，只写意图</div>
+<div class="deco">🎯</div>
+<span class="skill-badge">baoyu-xhs-images</span>
+</div>
+
+<!-- Card 2 -->
+<div class="slide content-card s2">
+<span class="page-num">2/9</span>
+<div class="num">01</div>
+<h2>什么是意图工程？</h2>
+<div class="desc">
+Prompt Engineering 告诉AI<span class="highlight">怎么做</span><br><br>
+Intent Engineering 告诉AI<span class="highlight">做什么、为什么做、什么时候停</span><br><br>
+从"写提示词"进化到"设计意图"——这是产品经理最擅长的事
+</div>
+<div class="tag-row">
+<span>🧠 产品思维</span>
+<span>🎯 意图驱动</span>
+<span>🤖 Agent设计</span>
+</div>
+<span class="skill-badge">baoyu-xhs-images</span>
+</div>
+
+<!-- Card 3 -->
+<div class="slide content-card s3">
+<span class="page-num">3/9</span>
+<div class="num">02</div>
+<h2>Intent Capsule 意图胶囊</h2>
+<div class="desc">
+一个结构化的Agent设计文档：<br><br>
+🎯 <b>目标</b> — 解决什么问题，为什么重要<br>
+✅ <b>期望结果</b> — 用户视角的成功标准<br>
+📊 <b>健康指标</b> — 什么不能变差<br>
+🚧 <b>约束</b> — 引导性 + 硬性规则<br>
+🤖 <b>自主权</b> — 哪些自动做，哪些问人<br>
+🛑 <b>停止规则</b> — 什么时候完成/升级/停止
+</div>
+<div class="tag-row">
+<span>📋 结构化</span>
+<span>🔄 可迭代</span>
+</div>
+<span class="skill-badge">baoyu-xhs-images</span>
+</div>
+
+<!-- Card 4 -->
+<div class="slide content-card s4">
+<span class="page-num">4/9</span>
+<div class="num">03</div>
+<h2>为什么产品经理最适合？</h2>
+<div class="desc">
+工程师写代码 → AI写代码<br>
+产品经理定义<span class="highlight">做什么</span> → 这个能力AI替代不了<br><br>
+20年产品经验 = 20年意图设计经验<br><br>
+你一直在做Intent Engineering<br>只是以前叫"写PRD"
+</div>
+<div class="tag-row">
+<span>💡 不可替代</span>
+<span>📝 PRD进化</span>
+<span>🚀 新机会</span>
+</div>
+<span class="skill-badge">baoyu-xhs-images</span>
+</div>
+
+<!-- Card 5 -->
+<div class="slide content-card s5">
+<span class="page-num">5/9</span>
+<div class="num">04</div>
+<h2>Context without Intent is Noise</h2>
+<div class="desc">
+没有意图的上下文 = 噪音<br><br>
+大多数AI工具失败的原因：<br>
+❌ 给了太多context，没给clear intent<br>
+❌ 告诉AI怎么做，没说为什么做<br>
+❌ 没有停止条件，Agent无限循环<br><br>
+<span class="highlight">Intent是AI Agent的灵魂</span>
+</div>
+<div class="tag-row">
+<span>🔑 核心洞察</span>
+<span>💀 常见错误</span>
+</div>
+<span class="skill-badge">baoyu-xhs-images</span>
+</div>
+
+<!-- Card 6 -->
+<div class="slide content-card s6">
+<span class="page-num">6/9</span>
+<div class="num">05</div>
+<h2>实战：Intent Studio</h2>
+<div class="desc">
+一个工具，把产品想法变成Agent规格：<br><br>
+1️⃣ 用自然语言描述你的产品想法<br>
+2️⃣ 自动生成完整的Intent Capsule<br>
+3️⃣ 一键导出Markdown<br>
+4️⃣ 直接交给工程师或AI去实现<br><br>
+产品经理的新超能力 ⚡
+</div>
+<div class="tag-row">
+<span>🛠 工具</span>
+<span>⚡ 即用</span>
+<span>📱 手机友好</span>
+</div>
+<span class="skill-badge">baoyu-xhs-images</span>
+</div>
+
+<!-- Card 7 -->
+<div class="slide content-card s7">
+<span class="page-num">7/9</span>
+<div class="num">06</div>
+<h2>商业机会</h2>
+<div class="desc">
+Micro-SaaS市场：$15.7B → $59.6B (2030)<br><br>
+三个方向：<br>
+📞 AI销售代表 — $2-5K/月<br>
+🐝 Agent营销蜂群 — $1-3K/月<br>
+⚡ 即时响应服务 — $500-2K/月<br><br>
+<span class="highlight">垂直 > 水平，手术刀 > 瑞士军刀</span>
+</div>
+<div class="tag-row">
+<span>💰 变现</span>
+<span>📈 增长</span>
+<span>🎯 垂直</span>
+</div>
+<span class="skill-badge">baoyu-xhs-images</span>
+</div>
+
+<!-- Card 8: Summary -->
+<div class="slide s8">
+<span class="page-num" style="color:rgba(255,255,255,.4)">8/9</span>
+<h2>🏆 赢家模式</h2>
+<div class="point"><span class="icon">🎯</span><p><b>垂直优于水平</b> — 做一个行业的手术刀，不做万能瑞士军刀</p></div>
+<div class="point"><span class="icon">📊</span><p><b>先证明ROI</b> — 免费试用 → 案例研究 → 付费转化</p></div>
+<div class="point"><span class="icon">🏰</span><p><b>领域专长是护城河</b> — 通用AI工具快速商品化，行业知识不会</p></div>
+<div class="point"><span class="icon">⚡</span><p><b>速度复利</b> — 每个细分市场的先发优势是真实的</p></div>
+<div class="point"><span class="icon">🚀</span><p><b>快速出货</b> — 这周的MVP胜过两个月后的完美产品</p></div>
+<span class="skill-badge" style="color:rgba(255,255,255,.2)">baoyu-xhs-images</span>
+</div>
+
+<!-- Card 9: CTA -->
+<div class="slide s9">
+<span class="page-num" style="color:rgba(255,255,255,.3)">9/9</span>
+<div class="emoji">🦞</div>
+<h2>Product Taste + AI</h2>
+<p>好产品 = 好品味 + AI能力<br>你已经有20年的品味<br>现在加上AI的翅膀</p>
+<button class="cta" onclick="window.open('https://raw.githack.com/mykie2015/intent-studio/master/index.html')">打开 Intent Studio →</button>
+<span class="skill-badge" style="color:rgba(255,255,255,.15)">baoyu-xhs-images</span>
+</div>
+
+</div>
+</div>
+
+<div class="dots" id="dots"></div>
+
+<script>
+const swiper=document.getElementById('swiper'),slides=document.getElementById('slides'),dotsC=document.getElementById('dots');
+const total=9;let cur=0,sx=0,dx=0,dragging=false;
+
+for(let i=0;i<total;i++){const d=document.createElement('div');d.className='dot'+(i===0?' active':'');dotsC.appendChild(d)}
+
+function go(n){cur=Math.max(0,Math.min(total-1,n));slides.style.transform=`translateX(-${cur*375}px)`;document.querySelectorAll('.dot').forEach((d,i)=>{d.className='dot'+(i===cur?' active':'')})}
+
+swiper.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;dragging=true});
+swiper.addEventListener('touchmove',e=>{if(!dragging)return;dx=e.touches[0].clientX-sx;slides.style.transform=`translateX(${-cur*375+dx}px)`;slides.style.transition='none'});
+swiper.addEventListener('touchend',()=>{slides.style.transition='transform .4s cubic-bezier(.25,.8,.25,1)';if(Math.abs(dx)>50){dx<0?go(cur+1):go(cur-1)}else{go(cur)}dx=0;dragging=false});
+
+swiper.addEventListener('mousedown',e=>{sx=e.clientX;dragging=true});
+swiper.addEventListener('mousemove',e=>{if(!dragging)return;dx=e.clientX-sx;slides.style.transform=`translateX(${-cur*375+dx}px)`;slides.style.transition='none'});
+swiper.addEventListener('mouseup',()=>{slides.style.transition='transform .4s cubic-bezier(.25,.8,.25,1)';if(Math.abs(dx)>50){dx<0?go(cur+1):go(cur-1)}else{go(cur)}dx=0;dragging=false});
+
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(cur+1);if(e.key==='ArrowLeft')go(cur-1)});
+</script>
+</body>
+</html>
