@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2026 AI创业 | 一个人也能月入5万</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            touch-action: pan-y;
+        }
+
+        .container {
+            width: 375px;
+            height: 500px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .cards-wrapper {
+            display: flex;
+            height: 100%;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+        }
+
+        .card {
+            min-width: 375px;
+            height: 500px;
+            background: #FFF8F0;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .card-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 14px;
+            color: #999;
+            font-weight: 500;
+        }
+
+        .card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .card-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2D2D2D;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+
+        .card-subtitle {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2D2D2D;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-text {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .highlight {
+            color: #FF6B6B;
+            font-weight: 600;
+        }
+
+        .accent-coral {
+            color: #FF6B6B;
+        }
+
+        .accent-teal {
+            color: #4ECDC4;
+        }
+
+        .accent-gold {
+            color: #FFD93D;
+        }
+
+        /* Card 1 - Cover */
+        .card-1 {
+            background: linear-gradient(135deg, #FFD93D 0%, #FF6B6B 100%);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .card-1 .card-title {
+            font-size: 36px;
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+            margin: 0;
+        }
+
+        .card-1 .emoji-decoration {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        /* Card 2 */
+        .card-2 {
+            background: linear-gradient(to bottom, #FFF8F0 0%, #FFE8E8 100%);
+        }
+
+        /* Card 3 */
+        .card-3 {
+            background: linear-gradient(to bottom, #FFF8F0 0%, #E8F8F5 100%);
+        }
+
+        /* Card 4 */
+        .card-4 {
+            background: linear-gradient(to bottom, #FFF8F0 0%, #FFF4E0 100%);
+        }
+
+        /* Card 5 - Summary */
+        .card-5 {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+        }
+
+        .card-5 .card-content {
+            color: white;
+        }
+
+        .card-5 .summary-item {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 18px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .card-5 .summary-item:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: 700;
+        }
+
+        .dots-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 20px 0;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(45, 45, 45, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #FF6B6B;
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        .divider {
+            height: 2px;
+            background: linear-gradient(to right, transparent, #FF6B6B, transparent);
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #FF6B6B;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #FF6B6B;
+        }
+
+        @media (max-width: 400px) {
+            .container {
+                width: 100vw;
+                height: 100vh;
+                border-radius: 0;
+            }
+
+            .card, .cards-wrapper > div {
+                min-width: 100vw;
+                height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="cards-wrapper" id="cardsWrapper">
+            <!-- Card 1: Cover -->
+            <div class="card card-1">
+                <div class="card-number">1/5</div>
+                <div class="card-content">
+                    <div class="emoji-decoration">💡</div>
+                    <div class="card-title">2026 AI创业<br>一个人也能月入5万</div>
+                </div>
+            </div>
+
+            <!-- Card 2: AI Sales Rep -->
+            <div class="card card-2">
+                <div class="card-number">2/5</div>
+                <div class="card-content">
+                    <div class="card-subtitle">
+                        <span>📞</span>
+                        <span class="accent-coral">AI销售代表</span>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="stat-box">
+                        <div class="stat-number">$2-5K/月/席位</div>
+                    </div>
+                    <div class="card-text">
+                        替代<span class="highlight">15万/年</span>的人工SDR
+                    </div>
+                    <div class="card-text">
+                        成本降低<span class="highlight">70-80%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Marketing Agent Swarm -->
+            <div class="card card-3">
+                <div class="card-number">3/5</div>
+                <div class="card-content">
+                    <div class="card-subtitle">
+                        <span>🐝</span>
+                        <span class="accent-teal">营销Agent蜂群</span>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="stat-box" style="border-left-color: #4ECDC4;">
+                        <div class="stat-number" style="color: #4ECDC4;">$1-3K/月</div>
+                    </div>
+                    <div class="card-text">
+                        SiteGPT创始人用<span class="highlight">OpenClaw Agent蜂群</span>做到
+                    </div>
+                    <div class="card-text">
+                        <span class="highlight" style="font-size: 20px;">$13K MRR</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: AI Instant Response -->
+            <div class="card card-4">
+                <div class="card-number">4/5</div>
+                <div class="card-content">
+                    <div class="card-subtitle">
+                        <span>⚡</span>
+                        <span class="accent-gold">AI即时响应</span>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="stat-box" style="border-left-color: #FFD93D;">
+                        <div class="stat-number" style="color: #FFD93D;">$500-2K/月</div>
+                    </div>
+                    <div class="card-text">
+                        <span class="highlight">60秒回复</span> vs 行业平均47小时
+                    </div>
+                    <div class="card-text">
+                        转化率提升<span class="highlight">100倍</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5: Summary -->
+            <div class="card card-5">
+                <div class="card-number" style="color: rgba(255,255,255,0.7);">5/5</div>
+                <div class="card-content">
+                    <div class="card-subtitle" style="color: white; font-size: 24px; margin-bottom: 30px;">
+                        🏆 赢家模式
+                    </div>
+                    <div class="summary-item">垂直 > 水平</div>
+                    <div class="summary-item">先证明ROI</div>
+                    <div class="summary-item">领域专长是护城河</div>
+                    <div class="summary-item">快速出货</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dots-indicator">
+            <div class="dot active" data-index="0"></div>
+            <div class="dot" data-index="1"></div>
+            <div class="dot" data-index="2"></div>
+            <div class="dot" data-index="3"></div>
+            <div class="dot" data-index="4"></div>
+        </div>
+    </div>
+
+    <script>
+        const wrapper = document.getElementById('cardsWrapper');
+        const dots = document.querySelectorAll('.dot');
+        let currentIndex = 0;
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+
+        function updateCards(index) {
+            currentIndex = Math.max(0, Math.min(4, index));
+            wrapper.style.transform = `translateX(-${currentIndex * 375}px)`;
+            
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
+        }
+
+        // Touch events
+        wrapper.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            isDragging = true;
+            wrapper.style.transition = 'none';
+        });
+
+        wrapper.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            currentX = e.touches[0].clientX;
+            const diff = currentX - startX;
+            const offset = -currentIndex * 375 + diff;
+            wrapper.style.transform = `translateX(${offset}px)`;
+        });
+
+        wrapper.addEventListener('touchend', (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+            wrapper.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+            
+            const diff = currentX - startX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0 && currentIndex > 0) {
+                    updateCards(currentIndex - 1);
+                } else if (diff < 0 && currentIndex < 4) {
+                    updateCards(currentIndex + 1);
+                } else {
+                    updateCards(currentIndex);
+                }
+            } else {
+                updateCards(currentIndex);
+            }
+        });
+
+        // Mouse events for desktop
+        wrapper.addEventListener('mousedown', (e) => {
+            startX = e.clientX;
+            isDragging = true;
+            wrapper.style.transition = 'none';
+            e.preventDefault();
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            currentX = e.clientX;
+            const diff = currentX - startX;
+            const offset = -currentIndex * 375 + diff;
+            wrapper.style.transform = `translateX(${offset}px)`;
+        });
+
+        document.addEventListener('mouseup', (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+            wrapper.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+            
+            const diff = currentX - startX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0 && currentIndex > 0) {
+                    updateCards(currentIndex - 1);
+                } else if (diff < 0 && currentIndex < 4) {
+                    updateCards(currentIndex + 1);
+                } else {
+                    updateCards(currentIndex);
+                }
+            } else {
+                updateCards(currentIndex);
+            }
+        });
+
+        // Dot navigation
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                updateCards(index);
+            });
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                updateCards(currentIndex - 1);
+            } else if (e.key === 'ArrowRight') {
+                updateCards(currentIndex + 1);
+            }
+        });
+    </script>
+</body>
+</html>
