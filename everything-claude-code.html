@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#0a0e27">
+<title>Everything Claude Code — 32 Skills Analyzed</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{color-scheme:dark}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0e27;color:#e0e6ed;min-height:100vh;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);touch-action:manipulation}
+.container{max-width:375px;margin:0 auto;padding:16px}
+.header{text-align:center;padding:20px 0 12px}
+.header h1{font-size:17px;font-weight:700;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header .sub{font-size:11px;color:#718096;margin-top:4px}
+.header .src{font-size:10px;color:#4a5568;margin-top:2px;word-break:break-all}
+.stats{display:flex;gap:6px;margin:12px 0}
+.stat{background:rgba(102,126,234,.08);border:1px solid rgba(102,126,234,.15);border-radius:10px;padding:10px;text-align:center;flex:1}
+.stat .num{font-size:22px;font-weight:800;color:#667eea}
+.stat .label{font-size:9px;color:#718096;margin-top:2px}
+.filter-bar{display:flex;gap:4px;overflow-x:auto;padding:4px 0 12px;-webkit-overflow-scrolling:touch}
+.filter-bar::-webkit-scrollbar{display:none}
+.filter{white-space:nowrap;font-size:10px;padding:5px 10px;border-radius:8px;background:rgba(255,255,255,.05);color:#718096;cursor:pointer;border:1px solid transparent;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.filter.active{background:rgba(102,126,234,.15);color:#667eea;border-color:rgba(102,126,234,.3)}
+.section-title{font-size:11px;font-weight:600;color:#667eea;text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px;display:flex;align-items:center;gap:6px}
+.card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px;margin-bottom:8px;transition:all .2s}
+.card:active{transform:scale(.98)}
+.card h3{font-size:13px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.card .desc{font-size:11px;color:#a0aec0;line-height:1.5}
+.badge{font-size:8px;padding:2px 5px;border-radius:4px;font-weight:600;flex-shrink:0}
+.badge.lang{background:rgba(96,165,250,.15);color:#60a5fa}
+.badge.sec{background:rgba(239,68,68,.15);color:#f87171}
+.badge.test{background:rgba(52,211,153,.15);color:#34d399}
+.badge.arch{background:rgba(251,191,36,.15);color:#fbbf24}
+.badge.meta{background:rgba(168,85,247,.15);color:#a855f7}
+.badge.db{background:rgba(244,114,182,.15);color:#f472b6}
+
+.highlight{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:12px;padding:16px;margin:16px 0}
+.highlight h3{color:#fff;font-size:14px;margin-bottom:8px}
+.highlight p{color:rgba(255,255,255,.85);font-size:11px;line-height:1.6}
+.highlight .pick{display:flex;align-items:center;gap:8px;margin-top:8px;padding:8px;background:rgba(255,255,255,.1);border-radius:8px}
+.highlight .pick .emoji{font-size:20px}
+.highlight .pick .text{font-size:11px;color:#fff}
+
+.footer{text-align:center;padding:16px;color:#4a5568;font-size:9px}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+<h1>📦 Everything Claude Code</h1>
+<div class="sub">32 Skills — Full Analysis</div>
+<div class="src">affaan-m/everything-claude-code</div>
+</div>
+
+<div class="stats">
+<div class="stat"><div class="num">32</div><div class="label">Skills</div></div>
+<div class="stat"><div class="num">7</div><div class="label">Languages</div></div>
+<div class="stat"><div class="num">6</div><div class="label">Categories</div></div>
+</div>
+
+<div class="filter-bar">
+<div class="filter active" onclick="filterAll()">All (32)</div>
+<div class="filter" onclick="filterCat('arch')">🏗 Architecture</div>
+<div class="filter" onclick="filterCat('test')">🧪 Testing/TDD</div>
+<div class="filter" onclick="filterCat('sec')">🔒 Security</div>
+<div class="filter" onclick="filterCat('db')">🗄 Database</div>
+<div class="filter" onclick="filterCat('meta')">⚙️ Meta/Tools</div>
+</div>
+
+<!-- TOP PICKS -->
+<div class="highlight">
+<h3>🏆 Top 5 for You (Product + AI + Enterprise)</h3>
+<div class="pick"><span class="emoji">🔒</span><div class="text"><b>security-review</b> — Auth, user input, secrets, APIs, payments. Your banking IT background makes this essential.</div></div>
+<div class="pick"><span class="emoji">🧪</span><div class="text"><b>tdd-workflow</b> — Test-driven dev with 80%+ coverage. Enforces quality before shipping.</div></div>
+<div class="pick"><span class="emoji">🧠</span><div class="text"><b>continuous-learning-v2</b> — Agent learns from sessions, creates instincts with confidence scoring. Self-improving AI.</div></div>
+<div class="pick"><span class="emoji">🗄</span><div class="text"><b>postgres-patterns</b> — Supabase-based query optimization, indexing, security. For any data-backed product.</div></div>
+<div class="pick"><span class="emoji">📐</span><div class="text"><b>strategic-compact</b> — Smart context management. Preserve context through task phases instead of losing it.</div></div>
+</div>
+
+<!-- ARCHITECTURE -->
+<div class="section-title" data-cat="arch">🏗 Architecture & Patterns (10)</div>
+
+<div class="card" data-cat="arch">
+<h3>backend-patterns <span class="badge arch">Node.js</span></h3>
+<div class="desc">API design, database optimization, server-side best practices for Node.js, Express, Next.js API routes.</div>
+</div>
+
+<div class="card" data-cat="arch">
+<h3>frontend-patterns <span class="badge arch">React</span></h3>
+<div class="desc">React, Next.js, state management, performance optimization, UI best practices.</div>
+</div>
+
+<div class="card" data-cat="arch">
+<h3>coding-standards <span class="badge arch">Universal</span></h3>
+<div class="desc">Universal standards for TypeScript, JavaScript, React, Node.js development.</div>
+</div>
+
+<div class="card" data-cat="arch">
+<h3>python-patterns <span class="badge lang">Python</span></h3>
+<div class="desc">Pythonic idioms, PEP 8, type hints, robust and maintainable Python apps.</div>
+</div>
+
+<div class="card" data-cat="arch">
+<h3>golang-patterns <span class="badge lang">Go</span></h3>
+<div class="desc">Idiomatic Go patterns, conventions for robust, efficient Go applications.</div>
+</div>
+
+<div class="card" data-cat="arch">
+<h3>django-patterns <span class="badge lang">Django</span></h3>
+<div class="desc">Django architecture, DRF REST APIs, ORM, caching, signals, middleware.</div>
+</div>
+
+<div class="card" data-cat="arch">
+<h3>springboot-patterns <span class="badge lang">Java</span></h3>
+<div class="desc">Spring Boot architecture, REST API, layered services, caching, async processing.</div>
+</div>
+
+<div class="card" data-cat="arch">
+<h3>java-coding-standards <span class="badge lang">Java</span></h3>
+<div class="desc">Naming, immutability, Optional, streams, exceptions, generics, project layout.</div>
+</div>
+
+<div class="card" data-cat="arch">
+<h3>jpa-patterns <span class="badge lang">Java</span></h3>
+<div class="desc">JPA/Hibernate entity design, relationships, query optimization, transactions.</div>
+</div>
+
+<div class="card" data-cat="arch">
+<h3>iterative-retrieval <span class="badge meta">Pattern</span></h3>
+<div class="desc">Progressive context retrieval to solve the subagent context problem. Refine until you find what you need.</div>
+</div>
+
+<!-- TESTING -->
+<div class="section-title" data-cat="test">🧪 Testing & TDD (8)</div>
+
+<div class="card" data-cat="test">
+<h3>tdd-workflow <span class="badge test">Universal</span></h3>
+<div class="desc">Test-driven dev for new features, bugs, refactoring. Enforces 80%+ coverage with unit + integration tests.</div>
+</div>
+
+<div class="card" data-cat="test">
+<h3>python-testing <span class="badge test">pytest</span></h3>
+<div class="desc">pytest, TDD, fixtures, mocking, parametrization, coverage requirements.</div>
+</div>
+
+<div class="card" data-cat="test">
+<h3>golang-testing <span class="badge test">Go</span></h3>
+<div class="desc">Table-driven tests, subtests, benchmarks, fuzzing, coverage. Idiomatic Go TDD.</div>
+</div>
+
+<div class="card" data-cat="test">
+<h3>cpp-testing <span class="badge test">C++</span></h3>
+<div class="desc">GoogleTest/CTest, diagnosing flaky tests, coverage, sanitizers.</div>
+</div>
+
+<div class="card" data-cat="test">
+<h3>django-tdd <span class="badge test">Django</span></h3>
+<div class="desc">pytest-django, factory_boy, mocking, coverage, testing DRF APIs.</div>
+</div>
+
+<div class="card" data-cat="test">
+<h3>springboot-tdd <span class="badge test">Java</span></h3>
+<div class="desc">JUnit 5, Mockito, MockMvc, Testcontainers, JaCoCo coverage.</div>
+</div>
+
+<div class="card" data-cat="test">
+<h3>verification-loop <span class="badge test">Meta</span></h3>
+<div class="desc">Comprehensive verification system — run before every PR or release.</div>
+</div>
+
+<div class="card" data-cat="test">
+<h3>eval-harness <span class="badge test">EDD</span></h3>
+<div class="desc">Eval-driven development (EDD) — formal evaluation framework for Claude Code sessions.</div>
+</div>
+
+<!-- SECURITY -->
+<div class="section-title" data-cat="sec">🔒 Security (5)</div>
+
+<div class="card" data-cat="sec">
+<h3>security-review <span class="badge sec">Critical</span></h3>
+<div class="desc">Auth, user input, secrets, API endpoints, payments. Triggers on sensitive features.</div>
+</div>
+
+<div class="card" data-cat="sec">
+<h3>security-scan <span class="badge sec">AgentShield</span></h3>
+<div class="desc">Scan .claude/ directory for vulnerabilities, misconfigs, injection risks.</div>
+</div>
+
+<div class="card" data-cat="sec">
+<h3>django-security <span class="badge sec">Django</span></h3>
+<div class="desc">Auth, CSRF, SQL injection, XSS prevention, secure deployment.</div>
+</div>
+
+<div class="card" data-cat="sec">
+<h3>springboot-security <span class="badge sec">Java</span></h3>
+<div class="desc">Spring Security authn/authz, validation, CSRF, secrets, rate limiting.</div>
+</div>
+
+<div class="card" data-cat="sec">
+<h3>django-verification <span class="badge sec">Django</span></h3>
+<div class="desc">Migrations, linting, tests, security scans, deployment readiness checks.</div>
+</div>
+
+<!-- DATABASE -->
+<div class="section-title" data-cat="db">🗄 Database (2)</div>
+
+<div class="card" data-cat="db">
+<h3>postgres-patterns <span class="badge db">Supabase</span></h3>
+<div class="desc">Query optimization, schema design, indexing, security. Based on Supabase best practices.</div>
+</div>
+
+<div class="card" data-cat="db">
+<h3>clickhouse-io <span class="badge db">Analytics</span></h3>
+<div class="desc">ClickHouse query optimization, analytics, data engineering for high-performance analytical workloads.</div>
+</div>
+
+<!-- META -->
+<div class="section-title" data-cat="meta">⚙️ Meta & Tools (7)</div>
+
+<div class="card" data-cat="meta">
+<h3>continuous-learning-v2 <span class="badge meta">v2.0</span></h3>
+<div class="desc">Instinct-based learning — observes sessions via hooks, creates atomic instincts with confidence scoring, evolves into skills.</div>
+</div>
+
+<div class="card" data-cat="meta">
+<h3>continuous-learning <span class="badge meta">v1.0</span></h3>
+<div class="desc">Auto-extract reusable patterns from sessions, save as learned skills for future use.</div>
+</div>
+
+<div class="card" data-cat="meta">
+<h3>strategic-compact <span class="badge meta">Context</span></h3>
+<div class="desc">Manual context compaction at logical intervals. Preserve context through task phases, not arbitrary auto-compaction.</div>
+</div>
+
+<div class="card" data-cat="meta">
+<h3>configure-ecc <span class="badge meta">Installer</span></h3>
+<div class="desc">Interactive installer — guides through selecting and installing skills to user or project level.</div>
+</div>
+
+<div class="card" data-cat="meta">
+<h3>project-guidelines-example <span class="badge meta">Template</span></h3>
+<div class="desc">Example project-specific skill template based on a real production app.</div>
+</div>
+
+<div class="card" data-cat="meta">
+<h3>nutrient-document-processing <span class="badge meta">API</span></h3>
+<div class="desc">Process, convert, OCR, extract, redact, sign, fill documents. PDFs, DOCX, XLSX, PPTX, HTML, images.</div>
+</div>
+
+<div class="card" data-cat="meta">
+<h3>springboot-verification <span class="badge meta">CI</span></h3>
+<div class="desc">Build, static analysis, tests, security scans, diff review before release or PR.</div>
+</div>
+
+<div class="footer">
+Analyzed by Claw 🦞 | affaan-m/everything-claude-code<br>
+32 skills · 7 languages · MIT License
+</div>
+
+</div>
+
+<script>
+function filterAll(){
+document.querySelectorAll('.card,.section-title').forEach(c=>c.classList.remove('hidden'));
+document.querySelectorAll('.filter').forEach(f=>f.classList.remove('active'));
+document.querySelector('.filter').classList.add('active');
+}
+function filterCat(cat){
+document.querySelectorAll('.card,.section-title').forEach(c=>{
+c.classList.toggle('hidden',c.dataset.cat!==cat);
+});
+document.querySelectorAll('.filter').forEach(f=>f.classList.remove('active'));
+event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
