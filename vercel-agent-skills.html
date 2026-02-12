@@ -1,43 +1,61 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<title>Vercel Agent Skills 分析</title>
+<title>Vercel Agent Skills — Live Demo</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif;background:#0a0e27;color:#e0e6ed;min-height:100vh;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-.container{max-width:375px;margin:0 auto;padding:16px}
-.header{text-align:center;padding:24px 0 20px}
-.header h1{font-size:20px;font-weight:700;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.header p{font-size:12px;color:#718096;margin-top:6px}
-.header .src{font-size:11px;color:#4a5568;margin-top:4px;word-break:break-all}
-.stats{display:flex;gap:8px;margin:16px 0;justify-content:center}
-.stat{background:rgba(102,126,234,.1);border:1px solid rgba(102,126,234,.2);border-radius:10px;padding:10px 14px;text-align:center;flex:1}
-.stat .num{font-size:20px;font-weight:700;color:#667eea}
-.stat .label{font-size:10px;color:#718096;margin-top:2px}
-.skill-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px;margin-bottom:14px;transition:all .3s}
-.skill-card:active{transform:scale(.98)}
-.skill-name{font-size:16px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px}
-.skill-name .icon{font-size:20px}
-.skill-desc{font-size:13px;color:#a0aec0;line-height:1.6;margin-bottom:12px}
-.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.tag{font-size:10px;padding:3px 8px;border-radius:8px;font-weight:500}
-.tag.critical{background:rgba(239,68,68,.15);color:#f87171}
-.tag.high{background:rgba(251,191,36,.15);color:#fbbf24}
-.tag.medium{background:rgba(52,211,153,.15);color:#34d399}
-.rules-section{margin-top:10px}
-.rules-title{font-size:11px;color:#718096;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
-.rule{font-size:12px;color:#cbd5e0;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;align-items:flex-start;gap:6px}
-.rule:last-child{border:none}
-.rule .bullet{color:#667eea;flex-shrink:0}
-.rule-cat{font-size:11px;font-weight:600;color:#667eea;margin:12px 0 6px;display:flex;align-items:center;gap:6px}
-.expand-btn{font-size:11px;color:#667eea;background:rgba(102,126,234,.1);border:1px solid rgba(102,126,234,.2);border-radius:8px;padding:6px 12px;margin-top:8px;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.hidden{display:none}
-.verdict{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:14px;padding:20px;margin:20px 0;text-align:center}
-.verdict h3{color:#fff;font-size:16px;margin-bottom:8px}
-.verdict p{color:rgba(255,255,255,.8);font-size:13px;line-height:1.6}
-.footer{text-align:center;padding:20px;color:#4a5568;font-size:11px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0e27;color:#e0e6ed;min-height:100vh;padding:env(safe-area-inset-top) 16px env(safe-area-inset-bottom)}
+.container{max-width:375px;margin:0 auto}
+.header{text-align:center;padding:24px 0 16px}
+.header h1{font-size:18px;font-weight:700;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header .sub{font-size:12px;color:#718096;margin-top:4px}
+.tab-bar{display:flex;gap:4px;background:rgba(255,255,255,.05);border-radius:10px;padding:3px;margin-bottom:16px}
+.tab{flex:1;text-align:center;padding:8px 4px;font-size:11px;font-weight:500;color:#718096;border-radius:8px;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.tab.active{background:rgba(102,126,234,.2);color:#667eea}
+.panel{display:none}
+.panel.active{display:block}
+
+/* Audit styles */
+.audit-file{margin-bottom:16px}
+.audit-file h3{font-size:13px;font-weight:600;color:#a78bfa;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.finding{font-size:12px;padding:8px 10px;margin-bottom:4px;border-radius:8px;display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.finding.error{background:rgba(239,68,68,.08);border-left:3px solid #ef4444}
+.finding.warn{background:rgba(251,191,36,.08);border-left:3px solid #fbbf24}
+.finding.pass{background:rgba(52,211,153,.08);border-left:3px solid #34d399}
+.finding .line{color:#718096;font-size:11px;flex-shrink:0;min-width:32px}
+.finding .msg{color:#cbd5e0}
+.finding .fix{color:#667eea;font-size:11px;margin-top:2px}
+.score{text-align:center;margin:16px 0;padding:20px;background:rgba(255,255,255,.03);border-radius:14px}
+.score .num{font-size:48px;font-weight:800}
+.score .num.good{color:#34d399}
+.score .num.ok{color:#fbbf24}
+.score .num.bad{color:#ef4444}
+.score .label{font-size:12px;color:#718096;margin-top:4px}
+.score-bar{display:flex;gap:4px;margin-top:12px}
+.score-seg{height:6px;border-radius:3px;flex:1}
+.score-seg.pass{background:#34d399}
+.score-seg.warn{background:#fbbf24}
+.score-seg.fail{background:#ef4444}
+
+/* Skill cards */
+.skill-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px;margin-bottom:12px}
+.skill-card h3{font-size:14px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.skill-card .desc{font-size:12px;color:#a0aec0;line-height:1.6;margin-bottom:10px}
+.rule-list{list-style:none}
+.rule-list li{font-size:11px;color:#cbd5e0;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:6px}
+.rule-list li:last-child{border:none}
+.rule-list .cat{color:#667eea;font-weight:600;font-size:10px;text-transform:uppercase;padding:8px 0 4px;letter-spacing:.05em}
+.badge{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:600}
+.badge.crit{background:rgba(239,68,68,.15);color:#f87171}
+.badge.high{background:rgba(251,191,36,.15);color:#fbbf24}
+.badge.med{background:rgba(52,211,153,.15);color:#34d399}
+
+.summary{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:12px;padding:16px;margin:16px 0}
+.summary h3{color:#fff;font-size:14px;margin-bottom:8px}
+.summary p{color:rgba(255,255,255,.85);font-size:12px;line-height:1.6}
+.footer{text-align:center;padding:20px;color:#4a5568;font-size:10px}
 </style>
 </head>
 <body>
@@ -45,113 +63,197 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif;backg
 
 <div class="header">
 <h1>🔍 Vercel Agent Skills</h1>
-<p>Skill分析 + 效果展示</p>
-<div class="src">github.com/vercel-labs/agent-skills</div>
+<div class="sub">Live Demo — Skills running on real code</div>
 </div>
 
-<div class="stats">
-<div class="stat"><div class="num">5</div><div class="label">Skills</div></div>
-<div class="stat"><div class="num">57+</div><div class="label">Rules</div></div>
-<div class="stat"><div class="num">8</div><div class="label">Categories</div></div>
+<div class="tab-bar">
+<div class="tab active" onclick="showTab(0)">🎨 UI Audit</div>
+<div class="tab" onclick="showTab(1)">⚛️ React Rules</div>
+<div class="tab" onclick="showTab(2)">📱 RN Skills</div>
+<div class="tab" onclick="showTab(3)">🧩 Patterns</div>
 </div>
 
-<!-- Skill 1: React Best Practices -->
+<!-- Tab 0: Web Design Guidelines LIVE AUDIT -->
+<div class="panel active" id="p0">
+<div class="score">
+<div class="num ok">72</div>
+<div class="label">Web Interface Guidelines Score</div>
+<div class="score-bar">
+<div class="score-seg pass"></div><div class="score-seg pass"></div><div class="score-seg pass"></div>
+<div class="score-seg pass"></div><div class="score-seg warn"></div><div class="score-seg warn"></div>
+<div class="score-seg fail"></div><div class="score-seg pass"></div><div class="score-seg pass"></div>
+<div class="score-seg pass"></div>
+</div>
+<div class="label" style="margin-top:8px">Audited: intent-studio/index.html</div>
+</div>
+
+<div class="audit-file">
+<h3>📄 intent-studio/index.html</h3>
+
+<div class="finding error">
+<span class="line">:1</span>
+<div><span class="msg">Missing <code>&lt;meta name="theme-color"&gt;</code> — dark theme needs this for browser chrome</span><div class="fix">Fix: add &lt;meta name="theme-color" content="#0a0e27"&gt;</div></div>
+</div>
+
+<div class="finding error">
+<span class="line">:2</span>
+<div><span class="msg">Missing <code>color-scheme: dark</code> on html — fixes scrollbar, inputs in dark mode</span><div class="fix">Fix: add color-scheme: dark to &lt;html&gt; style</div></div>
+</div>
+
+<div class="finding warn">
+<span class="line">:98</span>
+<div><span class="msg"><code>textarea</code> missing <code>autocomplete</code> attribute</span><div class="fix">Fix: add autocomplete="off"</div></div>
+</div>
+
+<div class="finding warn">
+<span class="line">:98</span>
+<div><span class="msg">Placeholder uses "..." instead of "…" (ellipsis character)</span><div class="fix">Fix: replace ... with …</div></div>
+</div>
+
+<div class="finding error">
+<span class="line">:112</span>
+<div><span class="msg"><code>.generate-btn</code> uses no <code>aria-label</code> and has no loading state announcement</span><div class="fix">Fix: add aria-live="polite" region for async updates</div></div>
+</div>
+
+<div class="finding warn">
+<span class="line">:130</span>
+<div><span class="msg">Animation uses <code>left</code> property (shimmer) — not compositor-friendly</span><div class="fix">Fix: animate transform: translateX() instead of left</div></div>
+</div>
+
+<div class="finding error">
+<span class="line">:156</span>
+<div><span class="msg"><code>.action-btn</code> buttons missing <code>:focus-visible</code> styles</span><div class="fix">Fix: add focus-visible:ring-2 or equivalent outline</div></div>
+</div>
+
+<div class="finding warn">
+<span class="line">:180</span>
+<div><span class="msg">Missing <code>touch-action: manipulation</code> on interactive elements</span><div class="fix">Fix: prevents 300ms tap delay on mobile</div></div>
+</div>
+
+<div class="finding pass">
+<span class="line">✓</span>
+<div><span class="msg">Safe area insets correctly applied via env()</span></div>
+</div>
+
+<div class="finding pass">
+<span class="line">✓</span>
+<div><span class="msg">Semantic HTML: uses &lt;button&gt;, &lt;textarea&gt;, &lt;label&gt;</span></div>
+</div>
+
+<div class="finding pass">
+<span class="line">✓</span>
+<div><span class="msg">Responsive: uses clamp() for typography</span></div>
+</div>
+
+<div class="finding pass">
+<span class="line">✓</span>
+<div><span class="msg">No anti-patterns: no user-scalable=no, no onPaste prevention</span></div>
+</div>
+</div>
+
+<div class="summary">
+<h3>Audit Summary</h3>
+<p>4 errors, 4 warnings, 4 passes. Main issues: missing dark mode meta tags, no focus-visible styles, animation using non-compositor properties. All fixable in 10 minutes.</p>
+</div>
+</div>
+
+<!-- Tab 1: React Best Practices -->
+<div class="panel" id="p1">
 <div class="skill-card">
-<div class="skill-name"><span class="icon">⚛️</span> React Best Practices</div>
-<div class="skill-desc">Vercel工程团队的React/Next.js性能优化指南。57条规则，8个类别，按影响力排序。写代码、review代码、重构时自动触发。</div>
-<div class="tags">
-<span class="tag critical">CRITICAL: 消除瀑布流</span>
-<span class="tag critical">CRITICAL: Bundle优化</span>
-<span class="tag high">HIGH: 服务端性能</span>
+<h3>⚛️ React Best Practices <span class="badge crit">57 rules</span></h3>
+<div class="desc">Vercel Engineering's internal performance guide. 8 categories ranked by impact.</div>
+<ul class="rule-list">
+<li class="cat">🔴 CRITICAL — Eliminating Waterfalls</li>
+<li><span>→</span> async-parallel: Use Promise.all() for independent operations</li>
+<li><span>→</span> async-defer-await: Move await into branches where actually used</li>
+<li><span>→</span> async-suspense-boundaries: Use Suspense to stream content</li>
+<li class="cat">🔴 CRITICAL — Bundle Size</li>
+<li><span>→</span> bundle-barrel-imports: Import directly, avoid barrel files</li>
+<li><span>→</span> bundle-dynamic-imports: next/dynamic for heavy components</li>
+<li><span>→</span> bundle-defer-third-party: Load analytics after hydration</li>
+<li class="cat">🟡 HIGH — Server Performance</li>
+<li><span>→</span> server-cache-react: React.cache() for request dedup</li>
+<li><span>→</span> server-auth-actions: Auth server actions like API routes</li>
+<li><span>→</span> server-dedup-props: Avoid duplicate RSC serialization</li>
+<li class="cat">🟢 MEDIUM — Re-render Optimization</li>
+<li><span>→</span> rerender-derived-state: Derive state during render, not effects</li>
+<li><span>→</span> rerender-dependencies: Minimize useEffect dependencies</li>
+<li><span>→</span> rerender-functional-setstate: Use functional setState for prev-dependent updates</li>
+</ul>
 </div>
-<div class="rules-section">
-<div class="rules-title">核心规则示例</div>
-<div class="rule-cat">🔴 消除瀑布流 (CRITICAL)</div>
-<div class="rule"><span class="bullet">→</span> async-parallel: 用Promise.all()并行独立操作</div>
-<div class="rule"><span class="bullet">→</span> async-suspense-boundaries: 用Suspense流式传输内容</div>
-<div class="rule-cat">📦 Bundle优化 (CRITICAL)</div>
-<div class="rule"><span class="bullet">→</span> bundle-barrel-imports: 直接导入，避免barrel文件</div>
-<div class="rule"><span class="bullet">→</span> bundle-dynamic-imports: 用next/dynamic懒加载重组件</div>
-<div class="rule-cat" id="rp-more" class="hidden">🖥 服务端性能 (HIGH)</div>
-<div class="rule"><span class="bullet">→</span> server-cache-react: 用React.cache()请求级去重</div>
-<div class="rule"><span class="bullet">→</span> server-auth-actions: Server Actions要像API一样鉴权</div>
+
+<div class="summary">
+<h3>When to Use</h3>
+<p>Install this skill, then ask Claude to "review my React code for performance". It checks all 57 rules automatically. Most impactful: eliminating async waterfalls and reducing bundle size.</p>
 </div>
 </div>
 
-<!-- Skill 2: Composition Patterns -->
+<!-- Tab 2: React Native -->
+<div class="panel" id="p2">
 <div class="skill-card">
-<div class="skill-name"><span class="icon">🧩</span> Composition Patterns</div>
-<div class="skill-desc">React组合模式 — 解决boolean prop泛滥问题。用compound components、状态提升、context注入构建可扩展的组件库。含React 19新API。</div>
-<div class="tags">
-<span class="tag high">HIGH: 组件架构</span>
-<span class="tag medium">MEDIUM: 状态管理</span>
-<span class="tag medium">MEDIUM: React 19</span>
-</div>
-<div class="rules-section">
-<div class="rules-title">核心规则</div>
-<div class="rule"><span class="bullet">→</span> architecture-avoid-boolean-props: 不用boolean props定制行为，用组合</div>
-<div class="rule"><span class="bullet">→</span> architecture-compound-components: 用共享context构建复合组件</div>
-<div class="rule"><span class="bullet">→</span> state-context-interface: 定义通用接口(state/actions/meta)做依赖注入</div>
-<div class="rule"><span class="bullet">→</span> react19-no-forwardref: React 19不再需要forwardRef</div>
+<h3>📱 React Native Skills <span class="badge high">8 categories</span></h3>
+<div class="desc">RN + Expo best practices. Performance, animations, navigation, monorepo.</div>
+<ul class="rule-list">
+<li class="cat">🔴 CRITICAL — List Performance</li>
+<li><span>→</span> Use FlashList instead of FlatList for large lists</li>
+<li><span>→</span> Memoize list item components</li>
+<li><span>→</span> Stabilize callback references (useCallback)</li>
+<li><span>→</span> Avoid inline style objects in list items</li>
+<li><span>→</span> Extract functions outside render</li>
+<li class="cat">🟡 HIGH — Animation</li>
+<li><span>→</span> Only animate transform and opacity (GPU)</li>
+<li><span>→</span> Use useDerivedValue for computed animations</li>
+<li><span>→</span> Reanimated shared values need React Compiler compat</li>
+<li class="cat">🟡 HIGH — Navigation</li>
+<li><span>→</span> Lazy load screens</li>
+<li><span>→</span> Preload data on screen focus</li>
+<li class="cat">🟢 MEDIUM — Monorepo</li>
+<li><span>→</span> Single dependency versions across packages</li>
+<li><span>→</span> Shared config for native modules</li>
+</ul>
 </div>
 </div>
 
-<!-- Skill 3: React Native -->
+<!-- Tab 3: Composition Patterns -->
+<div class="panel" id="p3">
 <div class="skill-card">
-<div class="skill-name"><span class="icon">📱</span> React Native Skills</div>
-<div class="skill-desc">React Native + Expo最佳实践。覆盖列表性能、动画、导航、UI模式、原生模块配置。构建高性能移动应用的完整指南。</div>
-<div class="tags">
-<span class="tag critical">CRITICAL: 列表性能</span>
-<span class="tag high">HIGH: 动画</span>
-<span class="tag high">HIGH: 导航</span>
-</div>
-<div class="rules-section">
-<div class="rules-title">核心规则</div>
-<div class="rule"><span class="bullet">→</span> list-performance-virtualize: 大列表用FlashList</div>
-<div class="rule"><span class="bullet">→</span> list-performance-item-memo: 列表项组件要memoize</div>
-<div class="rule"><span class="bullet">→</span> animation-gpu-properties: 只动画transform和opacity</div>
-<div class="rule"><span class="bullet">→</span> monorepo-single-dependency-versions: monorepo统一依赖版本</div>
-</div>
-</div>
-
-<!-- Skill 4: Web Design Guidelines -->
-<div class="skill-card">
-<div class="skill-name"><span class="icon">🎨</span> Web Design Guidelines</div>
-<div class="skill-desc">UI代码审查工具 — 检查Web界面是否符合设计规范。说"review my UI"或"check accessibility"自动触发。实时从GitHub拉取最新规则。</div>
-<div class="tags">
-<span class="tag high">HIGH: 可访问性</span>
-<span class="tag medium">MEDIUM: UX审计</span>
-</div>
-<div class="rules-section">
-<div class="rules-title">工作方式</div>
-<div class="rule"><span class="bullet">1.</span> 从GitHub获取最新设计规范</div>
-<div class="rule"><span class="bullet">2.</span> 读取你指定的文件</div>
-<div class="rule"><span class="bullet">3.</span> 逐条检查所有规则</div>
-<div class="rule"><span class="bullet">4.</span> 输出 file:line 格式的发现</div>
-</div>
+<h3>🧩 Composition Patterns <span class="badge med">React 19</span></h3>
+<div class="desc">Stop boolean prop proliferation. Build scalable component APIs with composition.</div>
+<ul class="rule-list">
+<li class="cat">🟡 HIGH — Architecture</li>
+<li><span>→</span> Don't add boolean props to customize behavior — use composition</li>
+<li><span>→</span> Structure complex components with shared context (compound pattern)</li>
+<li class="cat">🟢 MEDIUM — State Management</li>
+<li><span>→</span> Provider is the only place that knows how state is managed</li>
+<li><span>→</span> Define generic interface: state + actions + meta</li>
+<li><span>→</span> Lift state into provider for sibling access</li>
+<li class="cat">🟢 MEDIUM — React 19</li>
+<li><span>→</span> No more forwardRef — ref is a regular prop now</li>
+<li><span>→</span> Use the new use() hook for context consumption</li>
+<li><span>→</span> Server Components change composition boundaries</li>
+</ul>
 </div>
 
-<!-- Skill 5: Vercel Deploy -->
-<div class="skill-card">
-<div class="skill-name"><span class="icon">🚀</span> Vercel Deploy (Claimable)</div>
-<div class="skill-desc">一键部署到Vercel — 生成可认领的部署链接。Claude.ai专用skill，让AI直接帮你部署项目。</div>
-<div class="tags">
-<span class="tag medium">部署自动化</span>
-<span class="tag medium">Claude.ai专用</span>
+<div class="summary">
+<h3>Before → After</h3>
+<p>❌ &lt;Button primary large disabled loading&gt; (boolean hell)<br>
+✅ &lt;Button variant="primary" size="lg"&gt;&lt;Spinner/&gt;&lt;/Button&gt; (composition)</p>
 </div>
-</div>
-
-<!-- Verdict -->
-<div class="verdict">
-<h3>💡 对你的价值</h3>
-<p>React Best Practices最实用 — 57条Vercel内部规则，直接提升代码质量。Web Design Guidelines可以审查你的Intent Studio和XHS Demo的UI。Composition Patterns适合构建组件库。</p>
 </div>
 
 <div class="footer">
 Analyzed by Claw 🦞 | vercel-labs/agent-skills<br>
-5 skills · 57+ rules · MIT License
+5 skills · 57+ rules · MIT License<br>
+Audit target: intent-studio/index.html
 </div>
 
 </div>
+
+<script>
+function showTab(n){
+document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===n));
+document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+}
+</script>
 </body>
 </html>
