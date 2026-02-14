@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validator - Ralph Wiggum Loop MVP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        input.error {
+            border-color: #f44336;
+        }
+        
+        input.valid {
+            border-color: #4caf50;
+        }
+        
+        .error-message {
+            color: #f44336;
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.3s;
+        }
+        
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .success-message {
+            background: #4caf50;
+            color: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .demo-note {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="badge">Ralph Wiggum Loop MVP</div>
+        <h1>Form Validator</h1>
+        <p class="subtitle">Built autonomously with TDD + FastAPI + Playwright</p>
+        
+        <div class="demo-note">
+            📝 <strong>Demo Mode:</strong> Client-side validation only. Full API version available on Vercel.
+        </div>
+        
+        <form id="validationForm">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input 
+                    type="text" 
+                    id="email" 
+                    name="email" 
+                    placeholder="example@domain.com"
+                    autocomplete="email"
+                >
+                <div class="error-message" id="email-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input 
+                    type="text" 
+                    id="phone" 
+                    name="phone" 
+                    placeholder="+1234567890"
+                    autocomplete="tel"
+                >
+                <div class="error-message" id="phone-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="date">Birth Date</label>
+                <input 
+                    type="text" 
+                    id="date" 
+                    name="date" 
+                    placeholder="YYYY-MM-DD"
+                    autocomplete="bday"
+                >
+                <div class="error-message" id="date-error"></div>
+            </div>
+            
+            <button type="submit" id="submitBtn">Submit Form</button>
+        </form>
+        
+        <div class="success-message" id="successMessage">
+            ✓ Form submitted successfully!
+        </div>
+    </div>
+    
+    <script>
+        // Client-side validation (demo version)
+        const fields = {
+            email: {
+                input: document.getElementById('email'),
+                error: document.getElementById('email-error')
+            },
+            phone: {
+                input: document.getElementById('phone'),
+                error: document.getElementById('phone-error')
+            },
+            date: {
+                input: document.getElementById('date'),
+                error: document.getElementById('date-error')
+            }
+        };
+
+        const submitBtn = document.getElementById('submitBtn');
+        const successMessage = document.getElementById('successMessage');
+        const form = document.getElementById('validationForm');
+
+        const validationState = {
+            email: false,
+            phone: false,
+            date: false
+        };
+
+        // Validation functions (client-side)
+        function validateEmail(email) {
+            if (!email.trim()) return { valid: false, message: 'Email is required' };
+            const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!pattern.test(email)) return { valid: false, message: 'Invalid email format' };
+            return { valid: true, message: 'Valid email' };
+        }
+
+        function validatePhone(phone) {
+            if (!phone.trim()) return { valid: false, message: 'Phone number is required' };
+            if (!phone.startsWith('+')) return { valid: false, message: 'Use international format (e.g., +1234567890)' };
+            const digits = phone.slice(1).replace(/\D/g, '');
+            if (digits.length < 10 || digits.length > 15) {
+                return { valid: false, message: 'Invalid phone number' };
+            }
+            return { valid: true, message: 'Valid phone number' };
+        }
+
+        function validateDate(dateStr) {
+            if (!dateStr.trim()) return { valid: false, message: 'Date is required' };
+            const pattern = /^\d{4}-\d{2}-\d{2}$/;
+            if (!pattern.test(dateStr)) return { valid: false, message: 'Invalid date format. Use YYYY-MM-DD' };
+            
+            const date = new Date(dateStr);
+            if (isNaN(date.getTime())) return { valid: false, message: 'Invalid date' };
+            if (date > new Date()) return { valid: false, message: 'Date must be in the past' };
+            
+            return { valid: true, message: 'Valid date' };
+        }
+
+        function updateFieldUI(fieldName, result) {
+            const field = fields[fieldName];
+            
+            if (result.valid) {
+                field.input.classList.remove('error');
+                field.input.classList.add('valid');
+                field.error.classList.remove('show');
+                validationState[fieldName] = true;
+            } else {
+                field.input.classList.remove('valid');
+                field.input.classList.add('error');
+                field.error.textContent = result.message;
+                field.error.classList.add('show');
+                validationState[fieldName] = false;
+            }
+            
+            updateSubmitButton();
+        }
+
+        function updateSubmitButton() {
+            const allValid = Object.values(validationState).every(v => v === true);
+            submitBtn.disabled = !allValid;
+        }
+
+        // Add event listeners
+        fields.email.input.addEventListener('blur', () => {
+            const result = validateEmail(fields.email.input.value);
+            updateFieldUI('email', result);
+        });
+
+        fields.phone.input.addEventListener('blur', () => {
+            const result = validatePhone(fields.phone.input.value);
+            updateFieldUI('phone', result);
+        });
+
+        fields.date.input.addEventListener('blur', () => {
+            const result = validateDate(fields.date.input.value);
+            updateFieldUI('date', result);
+        });
+
+        Object.keys(fields).forEach(fieldName => {
+            fields[fieldName].input.addEventListener('focus', () => {
+                fields[fieldName].input.classList.remove('error', 'valid');
+                fields[fieldName].error.classList.remove('show');
+            });
+        });
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const emailResult = validateEmail(fields.email.input.value);
+            const phoneResult = validatePhone(fields.phone.input.value);
+            const dateResult = validateDate(fields.date.input.value);
+            
+            updateFieldUI('email', emailResult);
+            updateFieldUI('phone', phoneResult);
+            updateFieldUI('date', dateResult);
+            
+            if (emailResult.valid && phoneResult.valid && dateResult.valid) {
+                successMessage.classList.add('show');
+                
+                setTimeout(() => {
+                    form.reset();
+                    successMessage.classList.remove('show');
+                    Object.keys(fields).forEach(fieldName => {
+                        fields[fieldName].input.classList.remove('valid', 'error');
+                        validationState[fieldName] = false;
+                    });
+                    updateSubmitButton();
+                }, 2000);
+            }
+        });
+
+        updateSubmitButton();
+    </script>
+</body>
+</html>
