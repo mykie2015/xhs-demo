@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebMCP Hello World</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: #1a1a1a;
+    }
+    
+    .subtitle {
+      color: #666;
+      margin-bottom: 32px;
+      font-size: 14px;
+    }
+    
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    /* Agent-active styling */
+    form:tool-form-active {
+      outline: 3px solid #667eea;
+      outline-offset: 4px;
+      border-radius: 8px;
+    }
+    
+    label {
+      font-weight: 600;
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 4px;
+    }
+    
+    input {
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.2s;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+      margin-top: 8px;
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    /* Agent-invoked button styling */
+    button:tool-submit-active {
+      background: linear-gradient(135deg, #34a853 0%, #0f9d58 100%);
+      animation: pulse 1s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(52, 168, 83, 0.7); }
+      50% { box-shadow: 0 0 0 10px rgba(52, 168, 83, 0); }
+    }
+    
+    .result {
+      margin-top: 24px;
+      padding: 16px;
+      background: #f5f5f5;
+      border-radius: 8px;
+      display: none;
+    }
+    
+    .result.show {
+      display: block;
+    }
+    
+    .result h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #333;
+    }
+    
+    .result pre {
+      background: white;
+      padding: 12px;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-size: 13px;
+      color: #666;
+    }
+    
+    .badge {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <span class="badge">🤖 WebMCP Enabled</span>
+    <h1>Hello World</h1>
+    <p class="subtitle">A simple WebMCP demo - agents can call this form as a tool</p>
+    
+    <!-- Declarative WebMCP form -->
+    <form 
+      id="greetForm"
+      toolname="greet_user" 
+      tooldescription="Greet a user by name and optionally include their favorite color">
+      
+      <div>
+        <label for="name">Name</label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          placeholder="Enter your name" 
+          required>
+      </div>
+      
+      <div>
+        <label for="color">Favorite Color (optional)</label>
+        <input 
+          type="text" 
+          id="color" 
+          name="color" 
+          placeholder="e.g., blue, red, purple">
+      </div>
+      
+      <button type="submit">Greet Me</button>
+    </form>
+    
+    <div class="result" id="result">
+      <h3>Result:</h3>
+      <pre id="output"></pre>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('greetForm');
+    const result = document.getElementById('result');
+    const output = document.getElementById('output');
+    
+    // Handle form submission (works for both humans and agents)
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(form);
+      const name = formData.get('name');
+      const color = formData.get('color');
+      
+      // Build greeting
+      let greeting = `Hello, ${name}! 👋`;
+      if (color) {
+        greeting += `\n\nI see your favorite color is ${color}. Great choice!`;
+      }
+      
+      const response = {
+        greeting: greeting,
+        timestamp: new Date().toISOString(),
+        invokedBy: e.agentInvoked ? 'AI Agent' : 'Human'
+      };
+      
+      // Show result in UI
+      output.textContent = JSON.stringify(response, null, 2);
+      result.classList.add('show');
+      
+      // If invoked by agent, return structured response
+      if (e.agentInvoked) {
+        e.respondWith(Promise.resolve({
+          content: [{
+            type: 'text',
+            text: JSON.stringify(response)
+          }]
+        }));
+      }
+    });
+    
+    // Listen for agent activation
+    form.addEventListener('toolactivated', () => {
+      console.log('🤖 Agent is filling out the form...');
+    });
+    
+    form.addEventListener('toolcancel', () => {
+      console.log('❌ Agent cancelled the form');
+    });
+  </script>
+</body>
+</html>
